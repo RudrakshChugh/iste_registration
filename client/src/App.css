@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f7fa;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  color: #2c3e50;
+}
+
+.container {
+  max-width: 420px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.logo {
+  width: 75px;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  color: #1f3a93; /* ISTE blue tone */
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #cbd3dc;
+  border-radius: 8px;
+  background: #f9fafc;
+  transition: border 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #1f3a93;
+  background: #ffffff;
+}
+
+button {
+  padding: 12px;
+  font-size: 1rem;
+  background-color: #1f3a93;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #15376d;
+}
+
+.thank-you {
+  padding: 40px;
+  text-align: center;
+}
+
+.thank-you h2 {
+  font-size: 1.8rem;
+  color: #1f3a93;
+}
+
+@media (max-width: 500px) {
+  .container {
+    margin: 30px 15px;
+    padding: 25px 20px;
+  }
+
+  input, button {
+    font-size: 0.95rem;
+  }
+}
