@@ -186,7 +186,7 @@ html, body {
       <div className="container">
         {/* Replace this with <img src="/path-to-logo.png" className="logo" alt="ISTE Logo" /> when you have the image */}
         <div className="logo-section">
-          <img src="https://upload.wikimedia.org/wikipedia/en/1/13/ISTE_Logo.png" alt="ISTE Logo" className="logo" />
+          <img src="istelogo.png" alt="ISTE Logo" className="logo" />
           <h2 className="title">ISTE Registration</h2>
         </div>
 
