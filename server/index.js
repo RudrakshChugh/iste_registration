@@ -15,6 +15,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 console.log("MONGO_URI from .env:", process.env.MONGO_URI);
 
 async function connectDB() {
