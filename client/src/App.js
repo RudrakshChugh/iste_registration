@@ -13,6 +13,19 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+  // ⭐⭐⭐ FIX: Define backendUrl using environment variable ⭐⭐⭐
+  // For Create React App, environment variables must start with REACT_APP_
+  // In development, this will come from your .env file (e.g., REACT_APP_BACKEND_URL=http://localhost:5000)
+  // In production (on Vercel), this will come from the environment variable you set in Vercel's dashboard.
+  const backendBaseUrl = process.env.REACT_APP_BACKEND_URL;
+
+  // Optional: A fallback for extreme cases, though usually not needed if .env is set up
+  // if (!backendBaseUrl) {
+  //   console.warn("REACT_APP_BACKEND_URL is not set. Using a fallback for development.");
+  //   backendBaseUrl = "http://localhost:5000";
+  // }
+  // ⭐⭐⭐ END FIX ⭐⭐⭐
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors(prev => ({ ...prev, [e.target.name]: '' }));
@@ -20,16 +33,16 @@ function App() {
 
   const validate = () => {
     const newErrors = {};
-  
+
     if (!formData.name.trim()) newErrors.name = "Full name is required";
     if (!/^\d{6}$/.test(formData.admissionNo)) newErrors.admissionNo = "Admission number must be 6 digits";
     if (!formData.branch.trim()) newErrors.branch = "Branch is required";
     if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = "Phone number must be 10 digits";
     if (!formData.email.includes("@")) newErrors.email = "Email must contain '@'";
-  
+
     return newErrors;
   };
-  
+
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -42,11 +55,13 @@ function App() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/register', {
+      // ⭐⭐⭐ FIX: Use the environment variable for the fetch URL ⭐⭐⭐
+      const res = await fetch(`${backendBaseUrl}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+      // ⭐⭐⭐ END FIX ⭐⭐⭐
 
       const data = await res.json();
 
@@ -65,6 +80,8 @@ function App() {
         setErrors({ general: data.message });
       }
     } catch (err) {
+      // Improved error logging for debugging network issues
+      console.error("Fetch error:", err);
       setErrors({ general: "Something went wrong. Try again later." });
     }
   };
@@ -72,6 +89,7 @@ function App() {
   return (
     <>
       <style>{`
+/* Base styles for all screen sizes */
 html, body {
   margin: 0;
   padding: 0;
@@ -81,22 +99,21 @@ html, body {
   min-height: 100vh;
 }
 
+.container {
+  max-width: 500px;
+  margin: 60px auto;
+  background: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 
-        .container {
-          max-width: 500px;
-          margin: 60px auto;
-          background: white;
-          padding: 30px 25px;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-          width: 80px;
-          display: block;
-          margin: 0 auto 15px auto;
-        }
-          .logo-section {
+.logo {
+  width: 80px;
+  display: block;
+  margin: 0 auto 15px auto;
+}
+.logo-section {
   text-align: center;
   margin-bottom: 25px;
 }
@@ -108,84 +125,142 @@ html, body {
   margin-top: 10px;
 }
 
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
 
-        h2 {
-          text-align: center;
-          margin-bottom: 25px;
-          font-size: 24px;
-        }
+label {
+  font-weight: bold;
+  font-size: 14px;
+}
 
-        label {
-          font-weight: bold;
-          font-size: 14px;
-        }
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
 
-        input {
-          width: 100%;
-          padding: 10px;
-          margin-top: 5px;
-          margin-bottom: 15px;
-          border-radius: 6px;
-          border: 1px solid #ccc;
-          font-size: 14px;
-          transition: background-color 0.3s, border-color 0.3s;
-        }
+input:focus {
+  background-color: #e6f3ff;
+  border-color: #66aaff;
+  outline: none;
+}
 
-        input:focus {
-          background-color: #e6f3ff;
-          border-color: #66aaff;
-          outline: none;
-        }
+button {
+  width: 100%;
+  background-color: #0066cc;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-        button {
-          width: 100%;
-          background-color: #0066cc;
-          color: white;
-          padding: 12px;
-          border: none;
-          border-radius: 6px;
-          font-size: 16px;
-          cursor: pointer;
-        }
+button:hover {
+  background-color: #004d99;
+}
 
-        button:hover {
-          background-color: #004d99;
-        }
+.error {
+  color: red;
+  font-size: 13px;
+  margin-top: -12px;
+  margin-bottom: 12px;
+}
 
-        .error {
-          color: red;
-          font-size: 13px;
-          margin-top: -12px;
-          margin-bottom: 12px;
-        }
+.message {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: bold;
+}
 
-        .message {
-          margin-top: 15px;
-          text-align: center;
-          font-size: 17px;
-          font-weight: bold;
-        }
+.success {
+  color: green;
+}
 
-        .success {
-          color: green;
-        }
+.fail {
+  color: red;
+}
 
-        .fail {
-          color: red;
-        }
+.thank-you {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #2b7a2b;
+  padding: 40px 10px;
+}
 
-        .thank-you {
-          text-align: center;
-          font-size: 22px;
-          font-weight: bold;
-          color: #2b7a2b;
-          padding: 40px 10px;
-        }
+/* ⭐⭐⭐ Responsive Styles (Media Queries) ⭐⭐⭐ */
+
+/* For screens smaller than 600px (e.g., mobile phones) */
+@media (max-width: 600px) {
+  .container {
+    max-width: 90%; /* Adjust width to take up more space on smaller screens */
+    margin: 30px auto; /* Reduce top/bottom margin */
+    padding: 20px 15px; /* Reduce padding */
+  }
+
+  .logo {
+    width: 60px; /* Make logo slightly smaller */
+  }
+
+  .title {
+    font-size: 20px; /* Slightly smaller title */
+  }
+
+  h2 {
+    font-size: 20px; /* Slightly smaller heading */
+    margin-bottom: 20px;
+  }
+
+  input, button {
+    font-size: 14px; /* Adjust font size for inputs and buttons */
+    padding: 10px;
+  }
+
+  .message, .error {
+    font-size: 14px; /* Adjust message/error font size */
+  }
+
+  .thank-you {
+    font-size: 18px; /* Adjust thank you message font size */
+    padding: 30px 10px;
+  }
+}
+
+/* For even smaller screens (e.g., very small phones) */
+@media (max-width: 400px) {
+  .container {
+    margin: 15px auto;
+    padding: 15px 10px;
+  }
+
+  .logo {
+    width: 50px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+}
+
       `}</style>
 
       <div className="container">
-        {/* Replace this with <img src="/path-to-logo.png" className="logo" alt="ISTE Logo" /> when you have the image */}
         <div className="logo-section">
+          {/* Ensure 'istelogo.png' is in your 'public' folder or provide a full path */}
           <img src="istelogo.png" alt="ISTE Logo" className="logo" />
           <h2 className="title">ISTE Registration</h2>
         </div>
