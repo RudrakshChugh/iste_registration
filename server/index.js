@@ -18,7 +18,7 @@ const app = express();
 // Configure CORS to allow requests from your frontend
 // process.env.CLIENT_URL must be set in Vercel environment variables for production
 app.use(cors({
-    origin: process.env.CLIENT_URL
+  origin: process.env.CLIENT_URL
 }));
 app.use(express.json());
 

@@ -13,18 +13,9 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // ⭐⭐⭐ FIX: Define backendUrl using environment variable ⭐⭐⭐
-  // For Create React App, environment variables must start with REACT_APP_
-  // In development, this will come from your .env file (e.g., REACT_APP_BACKEND_URL=http://localhost:5000)
-  // In production (on Vercel), this will come from the environment variable you set in Vercel's dashboard.
+ 
   const backendBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
-  // Optional: A fallback for extreme cases, though usually not needed if .env is set up
-  // if (!backendBaseUrl) {
-  //   console.warn("REACT_APP_BACKEND_URL is not set. Using a fallback for development.");
-  //   backendBaseUrl = "http://localhost:5000";
-  // }
-  // ⭐⭐⭐ END FIX ⭐⭐⭐
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
